@@ -1,0 +1,48 @@
+﻿1) Agregar los paquetes
+	System.Data.SQLite
+	Entity Framework (en este caso EF6)
+
+2) En App.config
+	Dentro del bloque <configuration>
+		  <entityFramework>
+			<providers>
+			  <provider invariantName="System.Data.SQLite" type="System.Data.SQLite.EF6.SQLiteProviderServices, System.Data.SQLite.EF6" />
+			  <provider invariantName="System.Data.SQLite.EF6" type="System.Data.SQLite.EF6.SQLiteProviderServices, System.Data.SQLite.EF6" />
+			</providers>
+		  </entityFramework>
+
+		  <system.data>
+			<DbProviderFactories>
+			  <remove invariant="System.Data.SQLite.EF6" />
+			  <add name="SQLite Data Provider (Entity Framework 6)" invariant="System.Data.SQLite.EF6" description=".Net Framework Data Provider for SQLite (Entity Framework 6)" type="System.Data.SQLite.EF6.SQLiteProviderFactory, System.Data.SQLite.EF6" />
+			  <remove invariant="System.Data.SQLite" />
+			  <add name="SQLite Data Provider" invariant="System.Data.SQLite" description=".NET Framework Data Provider for SQLite" type="System.Data.SQLite.SQLiteFactory, System.Data.SQLite" /></DbProviderFactories>
+		  </system.data>
+
+		  <connectionStrings>
+			<add name="MyDBContext" connectionString="Data Source=test.sqlite" providerName="System.Data.SQLite" />
+		  </connectionStrings>
+
+3) Clase DBContext (Tener en cuenta que "base("MyDBContext")" debe ser igual al name del connectionstring)
+	    public class MyDBContext : DbContext
+        {
+            // default constructor should do this automatically but fails in this case
+            public MyDBContext()
+                : base("MyDBContext")
+            {
+
+            }
+            public DbSet<Note> Notes { get; set; }
+
+            protected override void OnModelCreating(DbModelBuilder modelBuilder)
+            {
+                modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            }
+        }
+
+4) Clase con los objetos (Tener en cuenta que los campos tienen que respetar mayusculas y minusculas)
+        public class Note
+        {
+            public long NoteId { get; set; }
+            public string Text { get; set; }
+        }
