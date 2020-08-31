@@ -49,3 +49,7 @@
             public long NoteId { get; set; }
             public string Text { get; set; }
         }
+
+		Tener en cuenta que
+		A) Los campos ID se llamen EjemploID (para una clase llamada Ejemplo)
+		B) El tipo compatible con String es TEXT. Varchar da error
