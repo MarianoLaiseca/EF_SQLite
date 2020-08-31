@@ -24,6 +24,9 @@
 		  </connectionStrings>
 
 3) Clase DBContext (Tener en cuenta que "base("MyDBContext")" debe ser igual al name del connectionstring)
+		using System.Data.Entity; //utilizado por : DbContext
+		using System.Data.Entity.ModelConfiguration.Conventions; //Utilizado por modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
 	    public class MyDBContext : DbContext
         {
             // default constructor should do this automatically but fails in this case
